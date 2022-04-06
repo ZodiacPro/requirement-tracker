@@ -328,7 +328,7 @@ graph = {
     var data = {
       labels: x.site,
       datasets: [{
-        label: "Raawa",
+        label: "",
         fill: true,
         backgroundColor: gradientStroke,
         borderColor: '#d048b6',
@@ -364,7 +364,7 @@ graph = {
     var data = {
       labels: x.site,
       datasets: [{
-        label: "Sec ID",
+        label: "",
         fill: true,
         backgroundColor: gradientStroke,
         borderColor: '#ff3636',
@@ -409,7 +409,7 @@ graph = {
       data: {
         labels: x.site,
         datasets: [{
-          label: "Active",
+          label: "",
           fill: true,
           backgroundColor: gradientStroke,
           hoverBackgroundColor: gradientStroke,

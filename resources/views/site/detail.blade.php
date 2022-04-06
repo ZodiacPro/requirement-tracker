@@ -156,15 +156,22 @@
                                             {{-- end task item --}}
                                         </div>
                                         <div class="col-md-2">
-                                            <h5 class="text-center" style="padding-bottom: 5px;">Status</h5>
+                                            <h5 class="text-center" style="">Action</h5>
                                             <hr style="border: 1px solid rgb(150, 63, 135);">
                                             {{-- task item button--}}
                                             @foreach ($task_item as $item)
                                                 @if ($item->task_id === $tasks->taskid)
-                                                <br>
                                                     <div class="row">
                                                         <div class="col-md-12 text-center">
-                                                            <div class="card">
+                                                            <div class="cardborder-bottom border-left border-top 
+                                                            @if($item->status === 0)
+                                                            border-secondary
+                                                            @elseif($item->status === 1)
+                                                            border-success
+                                                            @elseif($item->status === 2)
+                                                            border-danger
+                                                            @endif
+                                                            " style="padding: 70px 0px 0px 0px">
                                                                 <div class="card-body">
                                                                     @if($item->status === 0)
                                                                     <a href="{{route('aprrove', $item->id)}}" class="btn btn-sm btn-success float-center">Approve</a>
@@ -181,6 +188,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <br><br>
                                                     <br><br>
                                                 @endif
                                             @endforeach
