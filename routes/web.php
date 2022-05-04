@@ -40,10 +40,21 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('step-item-delete', ['as' => 'item.delete', 'uses' => 'App\Http\Controllers\SiteController@delete_item']);
 	Route::post('step-task-delete', ['as' => 'task.delete', 'uses' => 'App\Http\Controllers\SiteController@delete_task']);
 	Route::post('step-delete', ['as' => 'step.delete', 'uses' => 'App\Http\Controllers\SiteController@delete_step']);
+	Route::get('auto/{id}', [App\Http\Controllers\SiteController::class, 'auto_add'])->name('auto');
 });
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('area', ['as' => 'area.list', 'uses' => 'App\Http\Controllers\AreaController@list']);
 	Route::post('area', ['as' => 'area.list', 'uses' => 'App\Http\Controllers\AreaController@list']);
 	Route::post('area-create', ['as' => 'area.create', 'uses' => 'App\Http\Controllers\AreaController@create']);
+});
+
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('data/export/{id}', [App\Http\Controllers\SiteController::class, 'export'])->name('dl.all');
+	Route::get('data/approve/{id}', [App\Http\Controllers\SiteController::class, 'approved'])->name('dl.approve');
+	Route::get('data/reject/{id}', [App\Http\Controllers\SiteController::class, 'rejected'])->name('dl.reject');
+	Route::get('data/textall/{id}', [App\Http\Controllers\SiteController::class, 'textall'])->name('dl.textall');
+	Route::get('data/textapprove/{id}', [App\Http\Controllers\SiteController::class, 'textapprove'])->name('dl.textapprove');
+	Route::get('data/textreject/{id}', [App\Http\Controllers\SiteController::class, 'textreject'])->name('dl.textreject');
 });

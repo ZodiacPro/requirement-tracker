@@ -18,6 +18,7 @@
                     <div class="row">
                         <div class="col-12">
                             <h3 class="card-title">{{$site->sitecode}} <span><i class="tim-icons icon-settings clickable-clear" id="icon-settings"></i></span></h3>
+                           
                             
                         </div>
                     </div>
@@ -65,7 +66,34 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group dropright">
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Excel
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{route('dl.all',$id)}}">All</a>
+                    <a class="dropdown-item" href="{{route('dl.approve',$id)}}">Approved</a>
+                    <a class="dropdown-item" href="{{route('dl.reject',$id)}}">Rejected</a>
+                  </div>
+            </div>
+            <div class="btn-group dropright">
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Text
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{route('dl.textall',$id)}}">All</a>
+                    <a class="dropdown-item" href="{{route('dl.textapprove',$id)}}">Approved</a>
+                    <a class="dropdown-item" href="{{route('dl.textreject',$id)}}">Rejected</a>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
+            <br><br>
             <div class="card ">
                 <div class="card-header">
                     <div class="row">
@@ -74,6 +102,11 @@
                                 <span><i class="tim-icons icon-simple-add clickable adding" id="icon-step"></i></span>
                             {{-- <hr style="border: 1px solid rgb(150, 63, 135);"> --}}
                             <button type="button" class="btn btn-secondary btn-sm pull-right" id="togDelete">Delete</button>
+                            @if(count($step) === 0)
+                                <div class="text-center">
+                                <a  href="{{route('auto', $id)}}" style="float:center" class="btn btn-success btn-sm pull-center">Auto Add</a>
+                                </div>
+                            @endif
                             <button type="button" class="btn btn-secondary btn-sm pull-right" id="togCancel" style="display: none">Cancel</button></h5>
                         </div>
                     </div>
@@ -86,11 +119,14 @@
                             @php
                                 $step_active = 0;
                             @endphp
-                            {{$steps->name}} 
-                            <span><i class="tim-icons icon-simple-add clickable adding" id="icon-step" onclick="task({{$steps->id}})"></i></span>
-                            <span><i class="tim-icons icon-trash-simple clickable-clear trash" id="icon-step" onclick="delete_step({{$steps->id}})" style="display: none"></i></span>
-                            <hr style="border: 1px solid rgb(150, 63, 135);">
+                            <a data-toggle="collapse" href="#div{{$steps->id}}" role="button" aria-expanded="false" aria-controls="div1">
+                                {{$steps->name}} 
+                                <span><i class="tim-icons icon-simple-add clickable adding" id="icon-step" onclick="task({{$steps->id}})"></i></span>
+                                <span><i class="tim-icons icon-trash-simple clickable-clear trash" id="icon-step" onclick="delete_step({{$steps->id}})" style="display: none"></i></span>
+                                <hr style="border: 1px solid rgb(150, 63, 135);">
+                            </a>
                             {{-- task --}}
+                            <div class="collapse" id="div{{$steps->id}}">
                             @foreach ($task as $tasks)
                                 @if ($tasks->step_id === $steps->id)
                                     <div class="row">
@@ -131,7 +167,7 @@
                                                             <i class="tim-icons icon-trash-simple clickable-clear trash" style="margin-top:60px;font-size:15px;display:none;" onclick="delete_item({{$item->id}})"></i>
                                                         </div>
                                                         <div class="col-md-11">
-                                                            <div class="card border-bottom border-left 
+                                                            <div id="divline{{$item->id}}" class="card border-bottom border-left 
                                                             @if($item->status === 0)
                                                             border-secondary
                                                             @elseif($item->status === 1)
@@ -163,7 +199,7 @@
                                                 @if ($item->task_id === $tasks->taskid)
                                                     <div class="row">
                                                         <div class="col-md-12 text-center">
-                                                            <div class="cardborder-bottom border-left border-top 
+                                                            <div id="divlinea{{$item->id}}" class="cardborder-bottom border-left border-top 
                                                             @if($item->status === 0)
                                                             border-secondary
                                                             @elseif($item->status === 1)
@@ -173,16 +209,20 @@
                                                             @endif
                                                             " style="padding: 70px 0px 0px 0px">
                                                                 <div class="card-body">
-                                                                    @if($item->status === 0)
-                                                                    <a href="{{route('aprrove', $item->id)}}" class="btn btn-sm btn-success float-center">Approve</a>
-                                                                    <a href="{{route('reject', $item->id)}}" class="btn btn-sm btn-danger float-center">Reject</a>
-                                                                    @endif
-                                                                    @if($item->status === 1)
-                                                                    <a href="{{route('reject', $item->id)}}" class="btn btn-sm btn-danger float-center">Reject</a>
-                                                                    @endif
-                                                                    @if($item->status === 2)
-                                                                    <a href="{{route('aprrove', $item->id)}}" class="btn btn-sm btn-success float-center">Approve</a>
-                                                                    @endif
+                                                                    
+                                                                        <div id="pendingdiv{{$item->id}}" @if($item->status !== 0) style="display:none;" @endif>
+                                                                            <button onclick="approve({{$item->id}})" class="btn btn-sm btn-success float-center">Approve</button>
+                                                                            <button onclick="reject({{$item->id}})" class="btn btn-sm btn-danger float-center">Reject</button>
+                                                                        </div>
+                        
+                                                                        <div id="rejectdiv{{$item->id}}" @if($item->status !== 1) style="display:none;" @endif>
+                                                                            <button onclick="rejecta({{$item->id}})" class="btn btn-sm btn-danger float-center">Reject</button>
+                                                                        </div>
+
+                                                                    
+                                                                        <div id="approvediv{{$item->id}}" @if($item->status !== 2) style="display:none" @endif>
+                                                                            <button onclick="approvea({{$item->id}})" class="btn btn-sm btn-success float-center">Approve</button>
+                                                                        </div>
                                                                     
                                                                 </div>
                                                             </div>
@@ -198,10 +238,10 @@
                                     <br><br>
                                 @endif
                             @endforeach
+                            </div>
                             {{-- end task --}}
                         </div>
                     </div>
-                    <br><br><br>
                     @endforeach
                 </div>
                 <div class="card-footer py-4">
@@ -418,6 +458,56 @@
                 '_token': "{{ csrf_token() }}",
                 },
             });
+        }
+        function approve(x){
+            $.ajax({
+            type:"get",
+            url: "/aprrove/"+x,
+            });
+            $("#pendingdiv"+x).css({display: "none"});
+            $("#rejectdiv"+x).css({display: "block"});
+            $("#divline"+x).removeClass();
+            $("#divline"+x).addClass("card border-bottom border-left border-success");
+            $("#divlinea"+x).removeClass();
+            $("#divlinea"+x).addClass("cardborder-bottom border-left border-top border-success");
+        }
+        function reject(x){
+            $.ajax({
+            type:"get",
+            url: "/reject/"+x,
+            });
+            $("#pendingdiv"+x).css({display: "none"});
+            $("#approvediv"+x).css({display: "block"});
+            $("#divline"+x).removeClass();
+            $("#divline"+x).addClass("card border-bottom border-left border-danger");
+            $("#divlinea"+x).removeClass();
+            $("#divlinea"+x).addClass("cardborder-bottom border-left border-top border-danger");
+        }
+
+        function rejecta(x){
+            $.ajax({
+            type:"get",
+            url: "/reject/"+x,
+            });
+            $("#rejectdiv"+x).css({display: "none"});
+            $("#approvediv"+x).css({display: "block"});
+            $("#divline"+x).removeClass();
+            $("#divline"+x).addClass("card border-bottom border-left border-danger");
+            $("#divlinea"+x).removeClass();
+            $("#divlinea"+x).addClass("cardborder-bottom border-left border-top border-danger");
+        }
+
+        function approvea(x){
+            $.ajax({
+            type:"get",
+            url: "/aprrove/"+x,
+            });
+            $("#approvediv"+x).css({display: "none"});
+            $("#rejectdiv"+x).css({display: "block"});
+            $("#divline"+x).removeClass();
+            $("#divline"+x).addClass("card border-bottom border-left border-success");
+            $("#divlinea"+x).removeClass();
+            $("#divlinea"+x).addClass("cardborder-bottom border-left border-top border-success");
         }
 
         function delete_item(x){
