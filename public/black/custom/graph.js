@@ -324,9 +324,8 @@ graph = {
     gradientStroke.addColorStop(0.2, 'rgba(72,72,176,0.0)');
     gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
     //data for chart
-    let days7chart = x.pending;
     var data = {
-      labels: x.site,
+      labels: x.site1,
       datasets: [{
         label: "",
         fill: true,
@@ -342,7 +341,7 @@ graph = {
         pointHoverRadius: 4,
         pointHoverBorderWidth: 15,
         pointRadius: 4,
-        data: days7chart,
+        data: x.pending,
       }]
     };
 
@@ -362,7 +361,7 @@ graph = {
     gradientStroke.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
 
     var data = {
-      labels: x.site,
+      labels: x.site3,
       datasets: [{
         label: "",
         fill: true,
@@ -407,7 +406,7 @@ graph = {
         display: false
       },
       data: {
-        labels: x.site,
+        labels: x.site2,
         datasets: [{
           label: "",
           fill: true,

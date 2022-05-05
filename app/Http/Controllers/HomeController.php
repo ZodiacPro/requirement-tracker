@@ -49,23 +49,27 @@ class HomeController extends Controller
             ->get();
 
         $chart =[
-            'site' => [],
+            'site1' => [],
             'pending' => [],
+            'site2' => [],
             'active' => [],
+            'site3' => [],
             'reject' => [],
         ];
         // pending array
         foreach($task_pending as $task){
             $total_pending += $task->count;
-            array_push($chart['site'], $task->name);
+            array_push($chart['site1'], $task->name);
             array_push($chart['pending'], $task->count);
         }
         foreach($task_active as $task){
             $total_approved += $task->count;
+            array_push($chart['site2'], $task->name);
             array_push($chart['active'], $task->count);
         }
         foreach($task_reject as $task){
             $total_rejected += $task->count;
+            array_push($chart['site3'], $task->name);
             array_push($chart['reject'], $task->count);
         }
         return view('dashboard', compact('chart','total_pending','total_approved','total_rejected'));
